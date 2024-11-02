@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Itinerary</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-700 min-h-screen">
+    <div class="max-w-md mx-auto">
+        <div id="content"></div>
+    </div>
+    <script>
+        const flights = [
+            {
+                type: "DEPARTURE",
+                route: "DEN → AVL",
+                date: "FRIDAY, NOVEMBER 22, 2024",
+                flightNumber: "2323",
+                departure: {
+                    time: "6:40 AM",
+                    city: "Denver",
+                    weather: {
+                        temp: "42°F",
+                        condition: "Partly Cloudy"
+                    }
+                },
+                arrival: {
+                    time: "2:01 PM",
+                    city: "Asheville",
+                    weather: {
+                        temp: "58°F",
+                        condition: "Sunny"
+                    }
+                },
+                connection: "1 Stop (CLT)",
+                aircraft: "Airbus A321"
+            },
+            {
+                type: "RETURN",
+                route: "AVL → DEN",
+                date: "WEDNESDAY, NOVEMBER 27, 2024",
+                flightNumber: "5530",
+                departure: {
+                    time: "4:18 PM",
+                    city: "Asheville",
+                    weather: {
+                        temp: "55°F",
+                        condition: "Cloudy"
+                    }
+                },
+                arrival: {
+                    time: "8:23 PM",
+                    city: "Denver",
+                    weather: {
+                        temp: "38°F",
+                        condition: "Clear"
+                    }
+                },
+                connection: "1 Stop (CLT)",
+                aircraft: "Airbus A321"
+            }
+        ];
+
+        function renderFlight(flight, index, total) {
+            return `
+                <div class="p-6 text-center text-white">
+                    <p class="text-sm font-medium tracking-wider mb-2">${flight.type}</p>
+                    <h1 class="text-3xl font-light mb-2">${flight.route}</h1>
+                    <p class="text-sm font-light tracking-wider">${flight.date}</p>
+                    
+                    <div class="flex justify-center gap-2 mt-4">
+                        ${Array(total).fill(0).map((_, idx) => `
+                            <button
+                                onclick="showFlight(${idx})"
+                                class="w-2 h-2 rounded-full ${idx === index ? 'bg-white' : 'bg-white/40'}"
+                            ></button>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="mx-4 bg-white rounded-lg p-6 mb-8">
+                    <h2 class="text-2xl font-bold pt-4 mb-6">Flight ${flight.flightNumber}</h2>
+
+                    <div class="grid grid-cols-2 gap-8 mb-6">
+                        <div>
+                            <h3 class="text-gray-500 mb-1">Depart</h3>
+                            <p class="text-4xl font-light mb-1">${flight.departure.time}</p>
+                            <p class="text-xl mb-2">${flight.departure.city}</p>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="lucide-${flight.departure.weather.condition === 'Sunny' ? 'sun' : 'cloud'} 
+                                    ${flight.departure.weather.condition === 'Sunny' ? 'text-yellow-500' : 'text-gray-500'} mr-1"></i>
+                                <span>${flight.departure.weather.temp}</span>
+                                <span class="ml-1">• ${flight.departure.weather.condition}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-500 mb-1">Arrive</h3>
+                            <p class="text-4xl font-light mb-1">${flight.arrival.time}</p>
+                            <p class="text-xl mb-2">${flight.arrival.city}</p>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="lucide-${flight.arrival.weather.condition === 'Sunny' ? 'sun' : 'cloud'}
+                                    ${flight.arrival.weather.condition === 'Sunny' ? 'text-yellow-500' : 'text-gray-500'} mr-1"></i>
+                                <span>${flight.arrival.weather.temp}</span>
+                                <span class="ml-1">• ${flight.arrival.weather.condition}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 text-gray-600 text-sm">
+                        <p>${flight.connection}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-gray-500">Aircraft type</h3>
+                        <p class="text-xl">${flight.aircraft}</p>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t">
+                        <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                            <i class="lucide-calendar"></i>
+                            Add to Calendar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showFlight(index) {
+            document.getElementById('content').innerHTML = renderFlight(flights[index], index, flights.length);
+        }
+
+        // Show initial flight
+        showFlight(0);
+    </script>
+</body>
+</html>
